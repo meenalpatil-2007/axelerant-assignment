@@ -1,0 +1,46 @@
+<?php
+use Drupal\Core\Form\FormStateInterface;
+
+define("SITE_API_KEY_DEFAULT", "No API Key yet");
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ * Alters form form_system_site_information_settings
+ */
+function axelerant_form_system_site_information_settings_alter(&$form, \Drupal\Core\Form\FormStateInterface &$form_state) {
+  $form['siteapidetails'] = [
+    '#type' => 'fieldset',
+    '#title' => t('Site API details'),
+  ];
+  $siteApiKey = \Drupal::config('axelerant.settings')->get('siteapikey');
+  $form['siteapidetails']['siteapikey'] = array(
+	'#type' => 'textfield',
+	'#description' => 'Stores site API key',
+	'#title' => t('Site API Key'),
+	'#default_value' => $siteApiKey ? $siteApiKey : SITE_API_KEY_DEFAULT,
+	'#size' => 60,
+	'#maxlength' => 128,
+	'#required' => TRUE,
+  );
+  $form['actions']['submit']['#value'] = t('Update Configuration');
+  $form['#submit'][] = 'axelerant_submit_config_form';
+}
+
+/**
+ * Additonal submit handler.
+ */
+function axelerant_submit_config_form(&$form, FormStateInterface $form_state) {
+  $siteApiKey = $form_state->getValue('siteapikey');
+  $config = \Drupal::service('config.factory')->getEditable('axelerant.settings');
+  if (!empty($siteApiKey) && $siteApiKey !== SITE_API_KEY_DEFAULT) {
+    if ($siteApiKey ===  $config->get('siteapikey')) {
+      return;
+    }
+    $config->set('siteapikey', $siteApiKey)->save();
+    drupal_set_message(t("Value of Site API Key has been updated with '@siteapikey'.", ['@siteapikey' => $siteApiKey]));
+  }
+  else {
+    $config->clear('siteapikey')->save();
+  }
+}
+

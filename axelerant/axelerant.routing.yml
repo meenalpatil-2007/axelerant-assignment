@@ -1,0 +1,15 @@
+# Register Controller to return node in JSON format.
+axelerant.page_node_json:
+  path: '/page_node_json/{siteapikey}/{node}'
+  defaults:
+    _title: 'Page Node-JSON'
+    _controller: '\Drupal\axelerant\Controller\PageJSONController::getPageJSON'
+    arguments: ['@config.factory', '@serializer']
+  requirements:
+    _permission: 'access content'
+    node: \d+
+  methods: [GET]
+  options:
+    parameters:
+      node:
+        type: page_type

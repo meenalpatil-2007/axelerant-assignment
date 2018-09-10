@@ -1,0 +1,4 @@
+services:
+  # Register custom param converter service.
+  axelerant.getjson:
+    class: Drupal\axelerant\Controller\PageJSONController
