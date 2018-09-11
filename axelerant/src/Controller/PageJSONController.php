@@ -66,15 +66,15 @@ class PageJSONController extends ControllerBase {
   public function getPageJSON($siteapikey, $node) {
     $site_api_key = $this->config_factory->get('axelerant.settings')->get('siteapikey');
     if ($site_api_key === $siteapikey) {
-	  $node1 = Node::load($node);
-	  if (!empty($node1) && $node1->bundle() === 'page') {
-	    $data = $this->serializer->serialize($node1, 'json');
-	    return new JsonResponse(json_decode($data));
-	  } else {
-	    return new JsonResponse($this->getPageAccessDenied());
-	  }
-	}
-	return new JsonResponse($this->getPageAccessDenied());
+      $node1 = Node::load($node);
+      if (!empty($node1) && $node1->bundle() === 'page') {
+        $data = $this->serializer->serialize($node1, 'json');
+        return new JsonResponse(json_decode($data));
+      } else {
+        return new JsonResponse($this->getPageAccessDenied());
+      }
+    }
+    return new JsonResponse($this->getPageAccessDenied());
   }
 
   /**

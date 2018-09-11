@@ -9,7 +9,3 @@ axelerant.page_node_json:
     _permission: 'access content'
     node: \d+
   methods: [GET]
-  options:
-    parameters:
-      node:
-        type: page_type
